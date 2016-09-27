@@ -55,7 +55,7 @@ def get_args():
     parser.add_argument('-p', '--password', action='append', default=[],
                         help='Passwords, either single one for all accounts or one per account.')
 
-    parser.add_argument('-w', '--workers', type=int, default=10
+    parser.add_argument('-w', '--workers', type=int, default=10, 
                         help='Number of search worker threads to start. Defaults to the number of accounts specified.')
 
     parser.add_argument('-asi', '--account-search-interval', type=int, default=28880,
