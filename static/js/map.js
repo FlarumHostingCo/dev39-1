@@ -24,7 +24,7 @@ var searchMarkerStyles
 var excludedPokemon = []
 var notifiedPokemon = []
 var notifiedRarity = []
-ar notifiedMinPerfection = null
+var notifiedMinPerfection = null
 
 var map
 var rawDataIsLoading = false
