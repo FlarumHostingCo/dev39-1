@@ -33,6 +33,7 @@ var rangeMarkers = ['pokemon', 'pokestop', 'gym']
 var searchMarker
 var storeZoom = true
 var scanPath
+var moves
 
 
 var selectedStyle = 'light'
