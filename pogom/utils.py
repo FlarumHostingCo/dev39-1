@@ -48,22 +48,31 @@ def get_args():
     parser = configargparse.ArgParser(default_config_files=[configpath], auto_env_var_prefix='POGOMAP_')
     parser.add_argument('-a', '--auth-service', type=str.lower, action='append', default=[],
                         help='Auth Services, either one for all accounts or one per account: ptc or google. Defaults all to ptc.')
+
     parser.add_argument('-u', '--username', action='append', default=[],
                         help='Usernames, one per account.')
+
     parser.add_argument('-p', '--password', action='append', default=[],
                         help='Passwords, either single one for all accounts or one per account.')
-    parser.add_argument('-w', '--workers', type=int, default=10,
+
+    parser.add_argument('-w', '--workers', type=int,
                         help='Number of search worker threads to start. Defaults to the number of accounts specified.')
-    parser.add_argument('-asi', '--account-search-interval', type=int, default=10,
+
+    parser.add_argument('-asi', '--account-search-interval', type=int, default=28880,
                         help='Seconds for accounts to search before switching to a new account. 0 to disable.')
-    parser.add_argument('-ari', '--account-rest-interval', type=int, default=7200,
+
+    parser.add_argument('-ari', '--account-rest-interval', type=int, default=30,
                         help='Seconds for accounts to rest when they fail or are switched out')
+
     parser.add_argument('-ac', '--accountcsv',
                         help='Load accounts from CSV file containing "auth_service,username,passwd" lines')
+
     parser.add_argument('-l', '--location', type=parse_unicode,
                         help='Location, can be an address or coordinates')
+
     parser.add_argument('-j', '--jitter', help='Apply random -9m to +9m jitter to location',
                         action='store_true', default=True)
+
     parser.add_argument('-st', '--step-limit', help='Steps', type=int,
                         default=12)
     parser.add_argument('-sd', '--scan-delay',
