@@ -75,11 +75,11 @@ def get_args():
     parser.add_argument('-ed', '--encounter-delay',
                         help='Time delay between encounter pokemon in scan threads',
                         type=float, default=1)
- +    encounter_list = parser.add_mutually_exclusive_group()
- +    encounter_list.add_argument('-ewht', '--encounter-whitelist', action='append', default=[],
- +                                help='List of pokemon to encounter for more stats')
- +    encounter_list.add_argument('-eblk', '--encounter-blacklist', action='append', default=[],
- +                                help='List of pokemon to NOT encounter for more stats')
+    encounter_list = parser.add_mutually_exclusive_group()
+    encounter_list.add_argument('-ewht', '--encounter-whitelist', action='append', default=[],
+                                help='List of pokemon to encounter for more stats')
+    encounter_list.add_argument('-eblk', '--encounter-blacklist', action='append', default=[],
+                                help='List of pokemon to NOT encounter for more stats')
     parser.add_argument('-ld', '--login-delay',
                         help='Time delay between each login attempt',
                         type=float, default=5)
