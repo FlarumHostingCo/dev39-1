@@ -54,7 +54,7 @@ def get_args():
                         help='Passwords, either single one for all accounts or one per account.')
     parser.add_argument('-w', '--workers', type=int,
                         help='Number of search worker threads to start. Defaults to the number of accounts specified.')
-    parser.add_argument('-asi', '--account-search-interval', type=int, default=0,
+    parser.add_argument('-asi', '--account-search-interval', type=int, default=10,
                         help='Seconds for accounts to search before switching to a new account. 0 to disable.')
     parser.add_argument('-ari', '--account-rest-interval', type=int, default=7200,
                         help='Seconds for accounts to rest when they fail or are switched out')
@@ -63,12 +63,23 @@ def get_args():
     parser.add_argument('-l', '--location', type=parse_unicode,
                         help='Location, can be an address or coordinates')
     parser.add_argument('-j', '--jitter', help='Apply random -9m to +9m jitter to location',
-                        action='store_true', default=False)
+                        action='store_true', default=True)
     parser.add_argument('-st', '--step-limit', help='Steps', type=int,
                         default=12)
     parser.add_argument('-sd', '--scan-delay',
                         help='Time delay between requests in scan threads',
                         type=float, default=10)
+    parser.add_argument('-enc', '--encounter',
+                        help='Start an encounter to gather IVs and moves',
+                        action='store_true', default=False)
+    parser.add_argument('-ed', '--encounter-delay',
+                        help='Time delay between encounter pokemon in scan threads',
+                        type=float, default=1)
+ +    encounter_list = parser.add_mutually_exclusive_group()
+ +    encounter_list.add_argument('-ewht', '--encounter-whitelist', action='append', default=[],
+ +                                help='List of pokemon to encounter for more stats')
+ +    encounter_list.add_argument('-eblk', '--encounter-blacklist', action='append', default=[],
+ +                                help='List of pokemon to NOT encounter for more stats')
     parser.add_argument('-ld', '--login-delay',
                         help='Time delay between each login attempt',
                         type=float, default=5)
@@ -150,7 +161,7 @@ def get_args():
     parser.add_argument('--db-host', help='IP or hostname for the database')
     parser.add_argument('--db-port', help='Port for the database', type=int, default=3306)
     parser.add_argument('--db-max_connections', help='Max connections (per thread) for the database',
-                        type=int, default=5)
+                        type=int, default=500)
     parser.add_argument('--db-threads', help='Number of db threads; increase if the db queue falls behind',
                         type=int, default=1)
     parser.add_argument('-wh', '--webhook', help='Define URL(s) to POST webhook information to',
@@ -334,6 +345,9 @@ def get_args():
         if len(args.accounts) == 0:
             print(sys.argv[0] + ": Error: no accounts specified. Use -a, -u, and -p or --accountcsv to add accounts")
             sys.exit(1)
+
+        args.encounter_blacklist = [int(i) for i in args.encounter_blacklist]
+        args.encounter_whitelist = [int(i) for i in args.encounter_whitelist]
 
         # Decide which scanning mode to use
         if args.spawnpoint_scanning:
