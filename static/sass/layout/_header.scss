@@ -4,6 +4,24 @@
     padding-top: 3.125em;
   }
 
+#adBottom {
+left: -1px;
+position: fixed;
+text-align:left;
+bottom: -10px;
+width:100%;
+z-index:999;
+}
+
+#adTop {
+left:0;
+position: fixed;
+text-align:right;
+margin-top: 50px;
+width:25%;
+z-index:999;
+  }
+
   #header {
     background: darken(_palette(accent2, bg), 12);
     color: _palette(accent2, fg);
