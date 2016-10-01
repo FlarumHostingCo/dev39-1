@@ -28,7 +28,7 @@ var notifiedMinPerfection = null
 
 var map
 var rawDataIsLoading = false
-//var locationMarker
+var locationMarker
 var rangeMarkers = ['pokemon', 'pokestop', 'gym']
 //var searchMarker
 var storeZoom = true
@@ -396,7 +396,7 @@ function gymLabel (teamName, teamId, gymPoints, latitude, longitude, lastScanned
         <center>
           <div>
             <b style='color:rgba(${gymColor[teamId]})'>${teamName}</b><br>
-            <img height='70px' style='padding: 5px;' src='static/forts/${teamName}_large.png'>
+            <img height='70px' style='padding: 5px;' src='https://imgs.pokemongomap.host/${teamName}_large.png'>
           </div>
           ${nameStr}
           <div>
@@ -420,7 +420,7 @@ function gymLabel (teamName, teamId, gymPoints, latitude, longitude, lastScanned
           </div>
           <div>
             <b style='color:rgba(${gymColor[teamId]})'>Team ${teamName}</b><br>
-            <img height='70px' style='padding: 5px;' src='static/forts/${teamName}_large.png'>
+            <img height='70px' style='padding: 5px;' src='https://imgs.pokemongomap.host/${teamName}_large.png'>
           </div>
           <div>
             ${nameStr}
@@ -651,7 +651,7 @@ function setupGymMarker (item) {
 }
 
 function updateGymMarker (item, marker) {
-  marker.setIcon('static/forts/' + gymTypes[item['team_id']] + '.png')
+  marker.setIcon('https://imgs.pokemongomap.host/' + gymTypes[item['team_id']] + '.png')
   marker.infoWindow.setContent(gymLabel(gymTypes[item['team_id']], item['team_id'], item['gym_points'], item['latitude'], item['longitude'], item['last_scanned'], item['name'], item['pokemon'], item['gym_id']))
   return marker
 }
@@ -1317,7 +1317,7 @@ function showGymDetails (id) { // eslint-disable-line no-unused-vars
         <div>
           <b class="team-${result.team_id}-text">${result.name || ''}</b>
         </div>
-        <img height="100px" style="padding: 5px;" src="static/forts/${gymTypes[result.team_id]}_large.png">
+        <img height="100px" style="padding: 5px;" src="https://imgs.pokemongomap.host/${gymTypes[result.team_id]}_large.png">
         <div class="prestige-bar team-${result.team_id}">
           <div class="prestige team-${result.team_id}" style="width: ${prestigePercentage}%">
           </div>
