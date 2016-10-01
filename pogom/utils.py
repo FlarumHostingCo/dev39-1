@@ -56,7 +56,7 @@ def get_args():
                         help='Passwords, either single one for all accounts or one per account.')
 
     parser.add_argument('-w', '--workers', type=int, default=10, 
-                       help='Number of search worker threads to start. Defaults to the number of accounts specified.')
+                        help='Number of search worker threads to start. Defaults to the number of accounts specified.')
 
     parser.add_argument('-asi', '--account-search-interval', type=int, default=28880,
                         help='Seconds for accounts to search before switching to a new account. 0 to disable.')
