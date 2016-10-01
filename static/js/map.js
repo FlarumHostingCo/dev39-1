@@ -19,7 +19,7 @@ var i8lnDictionary = {}
 var languageLookups = 0
 var languageLookupThreshold = 3
 
-var searchMarkerStyles
+// var searchMarkerStyles
 
 var excludedPokemon = []
 var notifiedPokemon = []
@@ -28,9 +28,9 @@ var notifiedMinPerfection = null
 
 var map
 var rawDataIsLoading = false
-var locationMarker
+//var locationMarker
 var rangeMarkers = ['pokemon', 'pokestop', 'gym']
-var searchMarker
+//var searchMarker
 var storeZoom = true
 var scanPath
 var moves
@@ -41,7 +41,7 @@ var selectedStyle = 'light'
 
 var gymTypes = ['Uncontested', 'Mystic', 'Valor', 'Instinct']
 var gymPrestige = [2000, 4000, 8000, 12000, 16000, 20000, 30000, 40000, 50000]
-var audio = new Audio('static/sounds/ding.mp3')
+var audio = new Audio('https://imgs.pokemongomap.host/ding.mp3')
 
 //
 // Functions
@@ -155,12 +155,13 @@ function initMap () { // eslint-disable-line no-unused-vars
     redrawPokemon(mapData.lurePokemons)
   })
 
-  searchMarker = createSearchMarker()
-  locationMarker = createLocationMarker()
-  createMyLocationButton()
+ // searchMarker = createSearchMarker()
+ // locationMarker = createLocationMarker()
+  // createMyLocationButton()
   initSidebar()
 }
 
+/*
 function updateLocationMarker (style) {
   if (style in searchMarkerStyles) {
     locationMarker.setIcon(searchMarkerStyles[style].icon)
@@ -253,6 +254,7 @@ function createSearchMarker () {
   return searchMarker
 }
 
+*/ 
 var searchControlURI = 'search_control'
 function searchControl (action) {
   $.post(searchControlURI + '?action=' + encodeURIComponent(action))
@@ -277,6 +279,7 @@ function initSidebar () {
   $('#spawnpoints-switch').prop('checked', Store.get('showSpawnpoints'))
   $('#ranges-switch').prop('checked', Store.get('showRanges'))
   $('#sound-switch').prop('checked', Store.get('playSound'))
+  /*
   var searchBox = new google.maps.places.SearchBox(document.getElementById('next-location'))
   $('#next-location').css('background-color', $('#geoloc-switch').prop('checked') ? '#e0e0e0' : '#ffffff')
 
@@ -293,7 +296,7 @@ function initSidebar () {
     var loc = places[0].geometry.location
     changeLocation(loc.lat(), loc.lng())
   })
-
+*/
   var icons = $('#pokemon-icons')
   $.each(pokemonSprites, function (key, value) {
     icons.append($('<option></option>').attr('value', key).text(value.name))
@@ -596,6 +599,34 @@ function customizePokemonMarker (marker, item, skipNotification) {
   addListeners(marker)
 }
 
+function getMarkerPath (item) {
+  var gymLevel;
+  if (item.gym_points >= 50000) {
+    gymLevel = 10;
+  } else if (item.gym_points >= 40000) {
+    gymLevel = 9;
+  } else if (item.gym_points >= 30000) {
+    gymLevel = 8;
+  } else if (item.gym_points >= 20000) {
+    gymLevel = 7;
+  } else if (item.gym_points >= 16000) {
+    gymLevel = 6;
+  } else if (item.gym_points >= 12000) {
+    gymLevel = 5;
+  } else if (item.gym_points >= 8000) {
+    gymLevel = 4;
+  } else if (item.gym_points >= 4000) {
+    gymLevel = 3;
+  } else if (item.gym_points >= 2000) {
+    gymLevel = 2;
+  } else {
+    gymLevel = 1;
+  }
+
+  return 'https://imgs.pokemongomap.host/' + gymTypes[item['team_id']] + '_' + gymLevel + '.png';
+
+  }
+
 function setupGymMarker (item) {
   var marker = new google.maps.Marker({
     position: {
@@ -603,7 +634,7 @@ function setupGymMarker (item) {
       lng: item['longitude']
     },
     map: map,
-    icon: 'static/forts/' + gymTypes[item['team_id']] + '.png'
+     icon: getMarkerPath(item)
   })
 
   if (!marker.rangeCircle && isRangeActive(map)) {
@@ -634,7 +665,7 @@ function setupPokestopMarker (item) {
     },
     map: map,
     zIndex: 2,
-    icon: 'static/forts/' + imagename + '.png'
+    icon: 'https://imgs.pokemongomap.host/' + imagename + '.png'
   })
 
   if (!marker.rangeCircle && isRangeActive(map)) {
@@ -1209,7 +1240,7 @@ function centerMapOnLocation () {
     currentLocation.style.backgroundPosition = '0px 0px'
   }
 }
-
+/*
 function changeLocation (lat, lng) {
   var loc = new google.maps.LatLng(lat, lng)
   changeSearchLocation(lat, lng).done(function () {
@@ -1221,6 +1252,7 @@ function changeLocation (lat, lng) {
 function changeSearchLocation (lat, lng) {
   return $.post('next_loc?lat=' + lat + '&lon=' + lng, {})
 }
+*/
 
 function centerMap (lat, lng, zoom) {
   var loc = new google.maps.LatLng(lat, lng)
@@ -1509,7 +1541,7 @@ $(function () {
   $selectSearchIconMarker = $('#iconmarker-style')
   $selectLocationIconMarker = $('#locationmarker-style')
 
-  $.getJSON('static/dist/data/searchmarkerstyle.min.json').done(function (data) {
+ /* $.getJSON('static/dist/data/searchmarkerstyle.min.json').done(function (data) {
     searchMarkerStyles = data
     var searchMarkerStyleList = []
 
@@ -1548,7 +1580,7 @@ $(function () {
     })
 
     $selectLocationIconMarker.val(Store.get('locationMarkerStyle')).trigger('change')
-  })
+  }) */
 })
 
 $(function () {
