@@ -775,6 +775,10 @@ var StoreOptions = {
   'zoomLevel': {
     default: 16,
     type: StoreTypes.Number
+  },
+  'showStats': {
+    default: true,
+    type: StoreTypes.Boolean
   }
 }
 
@@ -843,22 +847,21 @@ function setupPokemonMarker (item, map, isBounceDisabled) {
   var sprite = pokemonSprites[Store.get('pokemonIcons')] || pokemonSprites['highres']
   var icon = getGoogleSprite(pokemonIndex, sprite, iconSize)
 
+  var isLured = item['pokestop_id'] !== null
+
   var animationDisabled = false
   if (isBounceDisabled === true) {
     animationDisabled = true
   }
 
-  var marker = new MarkerWithLabel({ // eslint-disable-line no-undef
+  var marker = new google.maps.Marker({
     position: {
-      lat: item['latitude'],
-      lng: item['longitude']
+      lat: (!isLured) ? item['latitude'] : (item['latitude'] + 0.0001),
+      lng: (!isLured) ? item['longitude'] : (item['longitude'] + 0.0001)
     },
     zIndex: 9999,
     map: map,
     icon: icon,
-    labelAnchor: new google.maps.Point(13, -iconSize / 2.4),
-    labelContent: '<span class=\'label-countdown\' disappears-at=\'' + item['disappear_time'] + '\'>00:00</span>',
-    labelClass: 'label',
     animationDisabled: animationDisabled
   })
 
