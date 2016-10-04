@@ -30,7 +30,7 @@ var map
 var rawDataIsLoading = false
 var locationMarker
 var rangeMarkers = ['pokemon', 'pokestop', 'gym']
-//var searchMarker
+var searchMarker
 var storeZoom = true
 var scanPath
 var moves
@@ -161,7 +161,7 @@ function initMap () { // eslint-disable-line no-unused-vars
   initSidebar()
 }
 
-/*
+
 function updateLocationMarker (style) {
   if (style in searchMarkerStyles) {
     locationMarker.setIcon(searchMarkerStyles[style].icon)
@@ -254,7 +254,7 @@ function createSearchMarker () {
   return searchMarker
 }
 
-*/ 
+ 
 var searchControlURI = 'search_control'
 function searchControl (action) {
   $.post(searchControlURI + '?action=' + encodeURIComponent(action))
