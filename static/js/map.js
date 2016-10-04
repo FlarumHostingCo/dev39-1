@@ -155,9 +155,9 @@ function initMap () { // eslint-disable-line no-unused-vars
     redrawPokemon(mapData.lurePokemons)
   })
 
- // searchMarker = createSearchMarker()
- // locationMarker = createLocationMarker()
-  // createMyLocationButton()
+  searchMarker = createSearchMarker()
+  locationMarker = createLocationMarker()
+  createMyLocationButton()
   initSidebar()
 }
 
