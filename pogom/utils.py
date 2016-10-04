@@ -44,35 +44,29 @@ def memoize(function):
 @memoize
 def get_args():
     # fuck PEP8
-    configpath = os.path.join(os.path.dirname(__file__), '../config/config.ini')
-    parser = configargparse.ArgParser(default_config_files=[configpath], auto_env_var_prefix='POGOMAP_')
+    defaultconfigpath = os.getenv('POGOMAP_CONFIG', os.path.join(os.path.dirname(__file__), '../config/config.ini'))
+    if not os.path.isfile(os.path.realpath(defaultconfigpath)):
+        defaultconfigpath = None
+    parser = configargparse.ArgParser(auto_env_var_prefix='POGOMAP_')
+    parser.add_argument('-cf', '--config', is_config_file=True, default=defaultconfigpath, help='Configuration file')
     parser.add_argument('-a', '--auth-service', type=str.lower, action='append', default=[],
                         help='Auth Services, either one for all accounts or one per account: ptc or google. Defaults all to ptc.')
-
     parser.add_argument('-u', '--username', action='append', default=[],
                         help='Usernames, one per account.')
-
     parser.add_argument('-p', '--password', action='append', default=[],
                         help='Passwords, either single one for all accounts or one per account.')
-
-    parser.add_argument('-w', '--workers', type=int, default=10, 
-                       help='Number of search worker threads to start. Defaults to the number of accounts specified.')
-
-    parser.add_argument('-asi', '--account-search-interval', type=int, default=28880,
+    parser.add_argument('-w', '--workers', type=int,
+                        help='Number of search worker threads to start. Defaults to the number of accounts specified.')
+    parser.add_argument('-asi', '--account-search-interval', type=int, default=0,
                         help='Seconds for accounts to search before switching to a new account. 0 to disable.')
-
-    parser.add_argument('-ari', '--account-rest-interval', type=int, default=30,
+    parser.add_argument('-ari', '--account-rest-interval', type=int, default=7200,
                         help='Seconds for accounts to rest when they fail or are switched out')
-
     parser.add_argument('-ac', '--accountcsv',
                         help='Load accounts from CSV file containing "auth_service,username,passwd" lines')
-
     parser.add_argument('-l', '--location', type=parse_unicode,
                         help='Location, can be an address or coordinates')
-
     parser.add_argument('-j', '--jitter', help='Apply random -9m to +9m jitter to location',
-                        action='store_true', default=True)
-
+                        action='store_true', default=False)
     parser.add_argument('-st', '--step-limit', help='Steps', type=int,
                         default=12)
     parser.add_argument('-sd', '--scan-delay',
@@ -80,7 +74,7 @@ def get_args():
                         type=float, default=10)
     parser.add_argument('-enc', '--encounter',
                         help='Start an encounter to gather IVs and moves',
-                        action='store_true', default=True)
+                        action='store_true', default=False)
     parser.add_argument('-ed', '--encounter-delay',
                         help='Time delay between encounter pokemon in scan threads',
                         type=float, default=1)
@@ -133,7 +127,7 @@ def get_args():
     parser.add_argument('-k', '--gmaps-key',
                         help='Google Maps Javascript API Key',
                         required=True)
-    parser.add_argument('--spawnpoints-only', help='Only scan locations with spawnpoints in them.',
+    parser.add_argument('--skip-empty', help='Enables skipping of empty cells  in normal scans - requires previously populated database (not to be used with -ss)',
                         action='store_true', default=False)
     parser.add_argument('-C', '--cors', help='Enable CORS on web server',
                         action='store_true', default=False)
@@ -170,7 +164,7 @@ def get_args():
     parser.add_argument('--db-host', help='IP or hostname for the database')
     parser.add_argument('--db-port', help='Port for the database', type=int, default=3306)
     parser.add_argument('--db-max_connections', help='Max connections (per thread) for the database',
-                        type=int, default=500)
+                        type=int, default=5)
     parser.add_argument('--db-threads', help='Number of db threads; increase if the db queue falls behind',
                         type=int, default=1)
     parser.add_argument('-wh', '--webhook', help='Define URL(s) to POST webhook information to',
@@ -192,10 +186,10 @@ def get_args():
     parser.add_argument('-spp', '--status-page-password', default=None,
                         help='Set the status page password')
     parser.add_argument('-el', '--encrypt-lib', help='Path to encrypt lib to be used instead of the shipped ones')
+    parser.add_argument('-odt', '--on-demand_timeout', help='Pause searching while web UI is inactive for this timeout(in seconds)', type=int, default=0)
     verbosity = parser.add_mutually_exclusive_group()
     verbosity.add_argument('-v', '--verbose', help='Show debug messages from PomemonGo-Map and pgoapi. Optionally specify file to log to.', nargs='?', const='nofile', default=False, metavar='filename.log')
     verbosity.add_argument('-vv', '--very-verbose', help='Like verbose, but show debug messages from all modules as well.  Optionally specify file to log to.', nargs='?', const='nofile', default=False, metavar='filename.log')
-    verbosity.add_argument('-d', '--debug', help='Deprecated, use -v or -vv instead.', action='store_true')
     parser.set_defaults(DEBUG=False)
 
     args = parser.parse_args()
@@ -282,6 +276,10 @@ def get_args():
                         else:
                             field_error = 'password'
 
+                    if num_fields > 3:
+                        print 'Too many fields in accounts file: max supported are 3 fields. Found {} fields'.format(num_fields)
+                        sys.exit(1)
+
                     # If something is wrong display error.
                     if field_error != '':
                         type_error = 'empty!'
@@ -361,7 +359,7 @@ def get_args():
         # Decide which scanning mode to use
         if args.spawnpoint_scanning:
             args.scheduler = 'SpawnScan'
-        elif args.spawnpoints_only:
+        elif args.skip_empty:
             args.scheduler = 'HexSearchSpawnpoint'
         else:
             args.scheduler = 'HexSearch'
@@ -423,34 +421,6 @@ def get_pokemon_rarity(pokemon_id):
 def get_pokemon_types(pokemon_id):
     pokemon_types = get_pokemon_data(pokemon_id)['types']
     return map(lambda x: {"type": i8ln(x['type']), "color": x['color']}, pokemon_types)
-
-
-def get_moves_data(move_id):
-    if not hasattr(get_moves_data, 'moves'):
-        file_path = os.path.join(
-            config['ROOT_PATH'],
-            config['DATA_DIR'],
-            'moves.min.json')
-
-        with open(file_path, 'r') as f:
-            get_moves_data.moves = json.loads(f.read())
-    return get_moves_data.moves[str(move_id)]
-
-
-def get_move_name(move_id):
-    return i8ln(get_moves_data(move_id)['name'])
-
-
-def get_move_damage(move_id):
-    return i8ln(get_moves_data(move_id)['damage'])
-
-
-def get_move_energy(move_id):
-    return i8ln(get_moves_data(move_id)['energy'])
-
-
-def get_move_type(move_id):
-    return i8ln(get_moves_data(move_id)['type'])
 
 
 def get_encryption_lib_path(args):
