@@ -10,9 +10,9 @@ var $selectStyle
 var $selectIconResolution
 var $selectIconSize
 var $selectLuredPokestopsOnly
-var $selectSearchIconMarker
+//var $selectSearchIconMarker
 var $selectGymMarkerStyle
-var $selectLocationIconMarker
+//var $selectLocationIconMarker
 
 var language = document.documentElement.lang === '' ? 'en' : document.documentElement.lang
 var idToPokemon = {}
@@ -20,7 +20,7 @@ var i8lnDictionary = {}
 var languageLookups = 0
 var languageLookupThreshold = 3
 
-var searchMarkerStyles
+//var searchMarkerStyles
 
 var excludedPokemon = []
 var notifiedPokemon = []
@@ -29,9 +29,9 @@ var notifiedMinPerfection = null
 
 var map
 var rawDataIsLoading = false
-var locationMarker
+//var locationMarker
 var rangeMarkers = ['pokemon', 'pokestop', 'gym']
-var searchMarker
+//var searchMarker
 var storeZoom = true
 var scanPath
 var moves
