@@ -35,18 +35,43 @@
     <link rel="apple-touch-icon" href="https://imgs.pokemongomap.host/152x152.png" sizes="152x152">
     <!-- retina iPhone 6 iOS 7 -->
     <link rel="apple-touch-icon" href="https://imgs.pokemongomap.host/180x180.png" sizes="180x180">
-    
+
     <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/app.min.css').lstrip('/') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
     <script src="{{ url_for('static', filename='js/vendor/modernizr.custom.js').lstrip('/') }}"></script>
   </head>
   <body id="top">
+  <!--
+  <script>
+  function NotInPokeMapFrame() {
+    return top === self;
+}
+function ReferrerIsPokeMapApp() {
+    if(document.referrer) {
+        return document.referrer.indexOf("poketrainerhq.com") != -1;
+    }
+    return false;
+}
+if (NotInPokeMapFrame()) {
+
+    top.location.replace("http://www.poketrainerhq.com");
+}
+</script>
+-->
+  <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.7&appId=743202575782365";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
     <div class="wrapper">
       <!-- Header -->
       <header id="header">
         <a href="#nav"><span class="label">Options</span></a>
-        <a href="https://www.paypal.me/PokeTrainerHQ" target="_blank">Donate To Help Support The Map Today!</a>
+        <a href="https://www.paypal.me/PokeTrainerHQ" target="_blank">Donate To Help Support The Map</a>
       </header>
       <!-- NAV -->
       <nav id="nav">
