@@ -1340,7 +1340,7 @@ function createUpdateWorker () {
         var data = e.data
         if (document.hidden && data.name === 'backgroundUpdate' && Date.now() - lastUpdateTime > 2500) {
           updateMap()
-          updateGeoLocation()
+          //updateGeoLocation()
         }
       }
 
@@ -1825,7 +1825,7 @@ $(function () {
   // run interval timers to regularly update map and timediffs
   window.setInterval(updateLabelDiffTime, 1000)
   window.setInterval(updateMap, 5000)
-  window.setInterval(updateGeoLocation, 1000)
+  //window.setInterval(updateGeoLocation, 1000)
 
   createUpdateWorker()
 
