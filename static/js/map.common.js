@@ -701,7 +701,7 @@ var StoreOptions = {
     type: StoreTypes.Boolean
   },
   'showPokestops': {
-    default: true,
+    default: false,
     type: StoreTypes.Boolean
   },
   'showLuredPokestopsOnly': {

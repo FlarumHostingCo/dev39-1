@@ -153,9 +153,9 @@ function initMap () { // eslint-disable-line no-unused-vars
     redrawPokemon(mapData.lurePokemons)
   })
 
-  searchMarker = createSearchMarker()
-  locationMarker = createLocationMarker()
-  createMyLocationButton()
+ // searchMarker = createSearchMarker()
+ // locationMarker = createLocationMarker()
+ // createMyLocationButton()
   initSidebar()
 
   $('#scan-here').on('click', function () {
@@ -169,6 +169,7 @@ function initMap () { // eslint-disable-line no-unused-vars
   })
 }
 
+/*
 function updateLocationMarker (style) {
   if (style in searchMarkerStyles) {
     locationMarker.setIcon(searchMarkerStyles[style].icon)
@@ -261,6 +262,7 @@ function createSearchMarker () {
   return searchMarker
 }
 
+*/
 var searchControlURI = 'search_control'
 function searchControl (action) {
   $.post(searchControlURI + '?action=' + encodeURIComponent(action))
@@ -289,6 +291,7 @@ function initSidebar () {
   $('#spawnpoints-switch').prop('checked', Store.get('showSpawnpoints'))
   $('#ranges-switch').prop('checked', Store.get('showRanges'))
   $('#sound-switch').prop('checked', Store.get('playSound'))
+ /*
   var searchBox = new google.maps.places.SearchBox(document.getElementById('next-location'))
   $('#next-location').css('background-color', $('#geoloc-switch').prop('checked') ? '#e0e0e0' : '#ffffff')
 
@@ -305,7 +308,7 @@ function initSidebar () {
     var loc = places[0].geometry.location
     changeLocation(loc.lat(), loc.lng())
   })
-
+*/
   var icons = $('#pokemon-icons')
   $.each(pokemonSprites, function (key, value) {
     icons.append($('<option></option>').attr('value', key).text(value.name))
@@ -1245,7 +1248,7 @@ function centerMapOnLocation () {
     currentLocation.style.backgroundPosition = '0px 0px'
   }
 }
-
+/*
 function changeLocation (lat, lng) {
   var loc = new google.maps.LatLng(lat, lng)
   changeSearchLocation(lat, lng).done(function () {
@@ -1257,7 +1260,7 @@ function changeLocation (lat, lng) {
 function changeSearchLocation (lat, lng) {
   return $.post('next_loc?lat=' + lat + '&lon=' + lng, {})
 }
-
+*/
 function centerMap (lat, lng, zoom) {
   var loc = new google.maps.LatLng(lat, lng)
 
@@ -1653,7 +1656,7 @@ $(function () {
     Store.set('showLuredPokestopsOnly', this.value)
     updateMap()
   })
-
+/*
   $selectSearchIconMarker = $('#iconmarker-style')
   $selectLocationIconMarker = $('#locationmarker-style')
 
@@ -1697,6 +1700,8 @@ $(function () {
 
     $selectLocationIconMarker.val(Store.get('locationMarkerStyle')).trigger('change')
   })
+
+  */
 
   $selectGymMarkerStyle = $('#gym-marker-style')
 
