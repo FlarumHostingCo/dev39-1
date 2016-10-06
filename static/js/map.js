@@ -1294,7 +1294,7 @@ function i8ln (word) {
     return word
   }
 }
-
+/*
 function updateGeoLocation () {
   if (navigator.geolocation && (Store.get('geoLocate') || Store.get('followMyLocation'))) {
     navigator.geolocation.getCurrentPosition(function (position) {
@@ -1321,7 +1321,7 @@ function updateGeoLocation () {
     })
   }
 }
-
+*/
 function createUpdateWorker () {
   try {
     if (isMobileDevice() && (window.Worker)) {
@@ -1888,10 +1888,10 @@ $(function () {
     }
   })
 
-  $('#lock-marker-switch').change(function () {
-    Store.set('lockMarker', this.checked)
-    searchMarker.setDraggable(!this.checked)
-  })
+ // $('#lock-marker-switch').change(function () {
+ //   Store.set('lockMarker', this.checked)
+ //   searchMarker.setDraggable(!this.checked)
+ // })
 
   $('#search-switch').change(function () {
     searchControl(this.checked ? 'on' : 'off')
